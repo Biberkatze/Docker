@@ -1,0 +1,29 @@
+version: '3'
+services:
+  provider:
+    build:
+      context: ./JokeProviderNode-Ordner
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - my-network
+
+  consumer:
+    build:
+      context: ./JokeConsumerNode-Ordner
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=production
+      - PROVIDER_URL=http://provider:3000
+    depends_on:
+      - provider
+    networks:
+      - my-network
+
+networks:
+  my-network:
